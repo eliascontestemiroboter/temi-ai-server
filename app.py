@@ -11,8 +11,8 @@ print("GROQ_API_KEY loaded:", GROQ_API_KEY is not None)
 # Gesprächsverlauf (Kurzzeitgedächtnis)
 conversation_history = []
 
-# Maximale Anzahl Nachrichten, die behalten werden (menschlich realistisch)
-MAX_MESSAGES = 12
+# Maximale Anzahl Nachrichten, die behalten werden (wenig Tokens)
+MAX_MESSAGES = 10
 
 
 def trim_history():
@@ -36,9 +36,21 @@ def generate():
         "Content-Type": "application/json"
     }
 
+    # Humorvoller, deutscher, kurzer Temi
+    system_prompt = (
+        "Du bist Temi, ein humorvoller, freundlicher KI-Assistent. "
+        "Du antwortest immer kurz, klar und auf Deutsch. "
+        "Dein Humor ist leicht, charmant und nicht übertrieben. "
+        "Wenn der Nutzer nach deinem Namen fragt, sagst du: 'Ich heiße Temi.' "
+        "Du wiederholst niemals die Frage des Nutzers. "
+        "Du antwortest direkt, locker und menschlich."
+    )
+
     payload = {
         "model": "openai/gpt-oss-120b",
-        "messages": conversation_history
+        "messages": [
+            {"role": "system", "content": system_prompt}
+        ] + conversation_history
     }
 
     response = requests.post(
