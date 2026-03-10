@@ -111,7 +111,7 @@ def generate():
     )
 
     payload = {
-        "model": "openai/gpt-oss-120b",
+        "model": "llama-3.3-70b-versatile",
         "messages": [
             {"role": "system", "content": system_prompt}
         ] + conversation_history
@@ -120,7 +120,8 @@ def generate():
     response = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers=headers,
-        json=payload
+        json=payload,
+        timeout=20
     )
 
     result = response.json()
@@ -180,8 +181,5 @@ def api_stats():
     })
 
 
-# ---------- WICHTIG: Render-Port verwenden ----------
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+# ---------- WICHTIG: KEIN app.run() ----------
+# Gunicorn startet die App automatisch
