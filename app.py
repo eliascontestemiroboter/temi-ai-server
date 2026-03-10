@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, render_template, redirect, url_for, s
 import requests
 import os
 import platform
-import psutil
 from datetime import datetime
 
 app = Flask(__name__)
@@ -183,7 +182,7 @@ def api_stats():
     })
 
 
-# ---------- API: SYSTEM INFO ----------
+# ---------- API: SYSTEM INFO (ohne psutil) ----------
 
 @app.route("/api/system")
 def api_system():
@@ -194,8 +193,7 @@ def api_system():
         "python_version": platform.python_version(),
         "system": platform.system(),
         "machine": platform.machine(),
-        "cpu_usage": psutil.cpu_percent(),
-        "ram_usage": psutil.virtual_memory().percent
+        "note": "CPU/RAM Anzeige deaktiviert (psutil entfernt)"
     })
 
 
