@@ -182,7 +182,7 @@ def api_stats():
     })
 
 
-# ---------- API: SYSTEM INFO (ohne psutil) ----------
+# ---------- API: SYSTEM INFO ----------
 
 @app.route("/api/system")
 def api_system():
