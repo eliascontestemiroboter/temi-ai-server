@@ -4,10 +4,10 @@ import os
 
 app = Flask(__name__)
 
+# API-Key aus Umgebungsvariablen laden
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-
-# Debug: Prüfen, ob der API-Key geladen wurde
 print("GROQ_API_KEY loaded:", GROQ_API_KEY is not None)
+
 
 @app.route("/generate", methods=["POST"])
 def generate():
@@ -19,23 +19,21 @@ def generate():
         "Content-Type": "application/json"
     }
 
+    # Funktionierendes Modell
     payload = {
         "model": "mixtral-8x7b-32768",
-,
         "messages": [
             {"role": "user", "content": question}
         ]
     }
 
-    r = requests.post(
+    response = requests.post(
         "https://api.groq.com/openai/v1/chat/completions",
         headers=headers,
         json=payload
     )
 
-    result = r.json()
-
-    # Debug: API-Antwort anzeigen
+    result = response.json()
     print("Groq response:", result)
 
     # Fehlerbehandlung
@@ -46,7 +44,6 @@ def generate():
         }), 500
 
     answer = result["choices"][0]["message"]["content"]
-
     return jsonify({"answer": answer})
 
 
