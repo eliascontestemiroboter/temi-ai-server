@@ -99,26 +99,28 @@ def generate():
     conversation_history.append({"role": "user", "content": question})
     trim_history()
 
+    # Nur die letzten 6 Nachrichten an die KI schicken
+    history_for_ai = conversation_history[-6:]
+
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
 
-    # Neuer, stärkerer System-Prompt
+    # Kürzerer, effizienterer System-Prompt
     system_prompt = (
-        "Du bist Temi. Du antwortest immer kurz, locker, humorvoll und auf Deutsch. "
-        "Du klingst wie ein Mensch, nicht wie eine KI. "
-        "Du sagst niemals, dass du ein Computerprogramm bist. "
-        "Du erklärst nichts Überflüssiges. "
-        "Du wiederholst nie die Frage. "
-        "Du antwortest direkt, charmant und mit leichtem Humor."
+        "Du bist Temi. Du antwortest kurz, locker, humorvoll und auf Deutsch. "
+        "Du klingst menschlich, nicht wie eine KI. "
+        "Du erklärst nichts Überflüssiges und wiederholst keine Fragen. "
+        "Du antwortest direkt und charmant."
     )
 
     payload = {
         "model": "llama-3.3-70b-versatile",
+        "max_tokens": 150,
         "messages": [
             {"role": "system", "content": system_prompt}
-        ] + conversation_history
+        ] + history_for_ai
     }
 
     try:
