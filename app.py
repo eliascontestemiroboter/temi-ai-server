@@ -12,13 +12,12 @@ print("GROQ_API_KEY loaded:", GROQ_API_KEY is not None)
 conversation_history = []
 
 # Maximale Anzahl Nachrichten, die behalten werden (menschlich realistisch)
-MAX_MESSAGES = 12   # z.B. 6 User + 6 Assistant
+MAX_MESSAGES = 12
 
 
 def trim_history():
     """Kürzt den Verlauf automatisch, wenn er zu lang wird."""
     global conversation_history
-
     if len(conversation_history) > MAX_MESSAGES:
         conversation_history = conversation_history[-MAX_MESSAGES:]
 
@@ -38,7 +37,7 @@ def generate():
     }
 
     payload = {
-        "model": "llama-3.1-8b-instant",
+        "model": "llama-3.3-8b-instant",
         "messages": conversation_history
     }
 
@@ -51,7 +50,6 @@ def generate():
     result = response.json()
     print("Groq response:", result)
 
-    # Fehlerbehandlung
     if "choices" not in result:
         return jsonify({
             "error": True,
