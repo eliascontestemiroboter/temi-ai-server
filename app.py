@@ -4,9 +4,23 @@ import os
 
 app = Flask(__name__)
 
-# API-Key aus Umgebungsvariablen laden
+# API-Key laden
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 print("GROQ_API_KEY loaded:", GROQ_API_KEY is not None)
+
+# Gesprächsverlauf (Kurzzeitgedächtnis)
+conversation_history = []
+
+# Maximale Anzahl Nachrichten, die behalten werden (menschlich realistisch)
+MAX_MESSAGES = 12   # z.B. 6 User + 6 Assistant
+
+
+def trim_history():
+    """Kürzt den Verlauf automatisch, wenn er zu lang wird."""
+    global conversation_history
+
+    if len(conversation_history) > MAX_MESSAGES:
+        conversation_history = conversation_history[-MAX_MESSAGES:]
 
 
 @app.route("/generate", methods=["POST"])
@@ -14,17 +28,18 @@ def generate():
     data = request.json
     question = data.get("question")
 
+    # User-Nachricht speichern
+    conversation_history.append({"role": "user", "content": question})
+    trim_history()
+
     headers = {
         "Authorization": f"Bearer {GROQ_API_KEY}",
         "Content-Type": "application/json"
     }
 
-    # Funktionierendes Modell
     payload = {
-        "model": "mixtral-8x7b-32768",
-        "messages": [
-            {"role": "user", "content": question}
-        ]
+        "model": "llama-3.1-8b-instant",
+        "messages": conversation_history
     }
 
     response = requests.post(
@@ -44,8 +59,13 @@ def generate():
         }), 500
 
     answer = result["choices"][0]["message"]["content"]
+
+    # Antwort speichern
+    conversation_history.append({"role": "assistant", "content": answer})
+    trim_history()
+
     return jsonify({"answer": answer})
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000) 
+    app.run(host="0.0.0.0", port=10000)
