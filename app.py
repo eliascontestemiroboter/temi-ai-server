@@ -36,7 +36,7 @@ def estimate_tokens(text: str) -> int:
     """Sehr grobe Token-Schätzung über Wortanzahl."""
     if not text:
         return 0
-    return len(text.split()) * 1  # sehr grob, reicht fürs Dashboard
+    return len(text.split())
 
 
 def is_logged_in():
@@ -161,7 +161,6 @@ def generate():
 def api_logs():
     if not is_logged_in():
         return jsonify({"error": "unauthorized"}), 401
-    # letzte 100 Einträge
     return jsonify(logs[-100:])
 
 
@@ -170,7 +169,6 @@ def api_stats():
     if not is_logged_in():
         return jsonify({"error": "unauthorized"}), 401
 
-    # Beispiel: Free-Tier grob 1.000.000 Tokens/Tag
     daily_limit = 1_000_000
     remaining = max(daily_limit - daily_token_usage, 0)
 
@@ -182,5 +180,8 @@ def api_stats():
     })
 
 
+# ---------- WICHTIG: Render-Port verwenden ----------
+
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
