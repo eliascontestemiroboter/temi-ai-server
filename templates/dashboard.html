@@ -1,12 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
+    <meta charset="UTF-8">
     <title>Temi Dashboard</title>
     <style>
-        body { font-family: Arial; background: #fafafa; padding: 20px; }
-        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; }
-        h2 { margin-top: 0; }
-        pre { background: #eee; padding: 10px; border-radius: 5px; }
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f7fa;
+        }
+
+        h1 {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #007aff;
+            font-size: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            animation: fadeIn 0.5s ease;
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        pre {
+            background: #f0f2f5;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
@@ -14,19 +62,21 @@
 <h1>Temi Dashboard</h1>
 <a href="/logout">Logout</a>
 
-<div class="card">
-    <h2>Tokenverbrauch</h2>
-    <pre id="stats">Lade...</pre>
-</div>
+<div class="grid">
+    <div class="card">
+        <h2>Tokenverbrauch</h2>
+        <pre id="stats">Lade...</pre>
+    </div>
 
-<div class="card">
-    <h2>Logs</h2>
-    <pre id="logs">Lade...</pre>
-</div>
+    <div class="card">
+        <h2>Logs</h2>
+        <pre id="logs">Lade...</pre>
+    </div>
 
-<div class="card">
-    <h2>System Info</h2>
-    <pre id="system">Lade...</pre>
+    <div class="card">
+        <h2>System Info</h2>
+        <pre id="system">Lade...</pre>
+    </div>
 </div>
 
 <script>
