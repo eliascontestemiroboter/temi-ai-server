@@ -37,7 +37,7 @@ def generate():
     }
 
     payload = {
-        "model": "llama-3.3-8b-instant",
+        "model": "openai/gpt-oss-120b",
         "messages": conversation_history
     }
 
