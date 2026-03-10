@@ -6,6 +6,9 @@ app = Flask(__name__)
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
+# Debug: Prüfen, ob der API-Key geladen wurde
+print("GROQ_API_KEY loaded:", GROQ_API_KEY is not None)
+
 @app.route("/generate", methods=["POST"])
 def generate():
     data = request.json
@@ -30,6 +33,17 @@ def generate():
     )
 
     result = r.json()
+
+    # Debug: API-Antwort anzeigen
+    print("Groq response:", result)
+
+    # Fehlerbehandlung
+    if "choices" not in result:
+        return jsonify({
+            "error": True,
+            "message": result.get("error", "Unknown error")
+        }), 500
+
     answer = result["choices"][0]["message"]["content"]
 
     return jsonify({"answer": answer})
