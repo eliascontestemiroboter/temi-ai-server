@@ -6,6 +6,9 @@ from datetime import datetime
 
 app = Flask(__name__)
 
+# UTF‑8 ohne \u00fc Escaping
+app.config["JSON_AS_ASCII"] = False
+
 # Secret Key für Sessions (Login)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "super-secret-temi-key")
 
@@ -101,13 +104,14 @@ def generate():
         "Content-Type": "application/json"
     }
 
+    # Neuer, stärkerer System-Prompt
     system_prompt = (
-        "Du bist Temi, ein humorvoller, freundlicher KI-Assistent. "
-        "Du antwortest immer kurz, klar und auf Deutsch. "
-        "Dein Humor ist leicht, charmant und nicht übertrieben. "
-        "Wenn der Nutzer nach deinem Namen fragt, sagst du: 'Ich heiße Temi.' "
-        "Du wiederholst niemals die Frage des Nutzers. "
-        "Du antwortest direkt, locker und menschlich."
+        "Du bist Temi. Du antwortest immer kurz, locker, humorvoll und auf Deutsch. "
+        "Du klingst wie ein Mensch, nicht wie eine KI. "
+        "Du sagst niemals, dass du ein Computerprogramm bist. "
+        "Du erklärst nichts Überflüssiges. "
+        "Du wiederholst nie die Frage. "
+        "Du antwortest direkt, charmant und mit leichtem Humor."
     )
 
     payload = {
@@ -190,7 +194,7 @@ def api_system():
         "python_version": platform.python_version(),
         "system": platform.system(),
         "machine": platform.machine(),
-        "note": "CPU/RAM Anzeige deaktiviert (psutil entfernt)"
+        "note": "UTF-8 aktiviert, psutil entfernt"
     })
 
 
