@@ -1,28 +1,97 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
+    <meta charset="UTF-8">
     <title>Temi Login</title>
     <style>
-        body { font-family: Arial; background: #f0f0f0; text-align: center; padding-top: 100px; }
-        .box { background: white; padding: 30px; width: 300px; margin: auto; border-radius: 10px; }
-        input { width: 90%; padding: 10px; margin: 10px 0; }
-        button { padding: 10px 20px; background: black; color: white; border: none; cursor: pointer; }
-        .error { color: red; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #dfe9f3 0%, #ffffff 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 40px;
+            width: 350px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #007aff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0,122,255,0.4);
+        }
+
+        button {
+            width: 95%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #005fcc;
+        }
+
+        .error {
+            color: #d00;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h2>Temi Login</h2>
 
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
+<div class="login-box">
+    <h2>Willkommen bei Temi</h2>
 
-        <form method="POST">
-            <input type="text" name="username" placeholder="Benutzername">
-            <input type="password" name="password" placeholder="Passwort">
-            <button type="submit">Login</button>
-        </form>
-    </div>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+        <input type="text" name="username" placeholder="Benutzername">
+        <input type="password" name="password" placeholder="Passwort">
+        <button type="submit">Login</button>
+    </form>
+</div>
+
 </body>
 </html>
