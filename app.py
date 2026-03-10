@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 import requests
 import os
+import platform
+import psutil
 from datetime import datetime
 
 app = Flask(__name__)
@@ -100,7 +102,6 @@ def generate():
         "Content-Type": "application/json"
     }
 
-    # Humorvoller, deutscher, kurzer Temi
     system_prompt = (
         "Du bist Temi, ein humorvoller, freundlicher KI-Assistent. "
         "Du antwortest immer kurz, klar und auf Deutsch. "
@@ -117,15 +118,16 @@ def generate():
         ] + conversation_history
     }
 
-    response = requests.post(
-        "https://api.groq.com/openai/v1/chat/completions",
-        headers=headers,
-        json=payload,
-        timeout=20
-    )
-
-    result = response.json()
-    print("Groq response:", result)
+    try:
+        response = requests.post(
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers=headers,
+            json=payload,
+            timeout=20
+        )
+        result = response.json()
+    except Exception as e:
+        return jsonify({"answer": f"Fehler bei Groq: {str(e)}"})
 
     if "choices" not in result:
         return jsonify({
@@ -178,6 +180,22 @@ def api_stats():
         "daily_limit": daily_limit,
         "daily_remaining": remaining,
         "total_logs": len(logs)
+    })
+
+
+# ---------- API: SYSTEM INFO ----------
+
+@app.route("/api/system")
+def api_system():
+    if not is_logged_in():
+        return jsonify({"error": "unauthorized"}), 401
+
+    return jsonify({
+        "python_version": platform.python_version(),
+        "system": platform.system(),
+        "machine": platform.machine(),
+        "cpu_usage": psutil.cpu_percent(),
+        "ram_usage": psutil.virtual_memory().percent
     })
 
 
