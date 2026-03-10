@@ -1,339 +1,61 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Temi Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
-            margin: 0;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(circle at top, #020617, #020617 40%, #020617 100%);
-            color: #e5e7eb;
-        }
-        .layout {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 240px;
-            background: #020617;
-            border-right: 1px solid #111827;
-            padding: 20px 16px;
-            box-sizing: border-box;
-        }
-        .logo {
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 24px;
-        }
-        .logo span {
-            color: #38bdf8;
-        }
-        .nav-section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #6b7280;
-            margin-bottom: 8px;
-        }
-        .nav-link {
-            font-size: 14px;
-            padding: 8px 10px;
-            border-radius: 8px;
-            color: #9ca3af;
-            cursor: pointer;
-            margin-bottom: 4px;
-        }
-        .nav-link.active {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15));
-            color: #e5e7eb;
-        }
-        .nav-link:hover {
-            background: #020617;
-            color: #e5e7eb;
-        }
-        .logout {
-            margin-top: 24px;
-            font-size: 13px;
-        }
-        .logout a {
-            color: #f97373;
-            text-decoration: none;
-        }
-        .main {
-            flex: 1;
-            padding: 20px 20px 32px;
-            box-sizing: border-box;
-        }
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 18px;
-        }
-        .topbar-title {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .topbar-sub {
-            font-size: 12px;
-            color: #9ca3af;
-        }
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-        .stat-card {
-            background: #020617;
-            border-radius: 14px;
-            padding: 12px 14px;
-            border: 1px solid #111827;
-        }
-        .stat-label {
-            font-size: 11px;
-            color: #9ca3af;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            margin-bottom: 4px;
-        }
-        .stat-value {
-            font-size: 18px;
-            font-weight: 600;
-        }
-        .stat-sub {
-            font-size: 11px;
-            color: #6b7280;
-        }
-        .content {
-            display: grid;
-            grid-template-columns: minmax(0, 2fr) minmax(0, 1.4fr);
-            gap: 14px;
-        }
-        @media (max-width: 900px) {
-            .layout {
-                flex-direction: column;
-            }
-            .sidebar {
-                width: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-            .content {
-                grid-template-columns: 1fr;
-            }
-        }
-        .panel {
-            background: #020617;
-            border-radius: 14px;
-            border: 1px solid #111827;
-            padding: 12px 14px;
-            box-sizing: border-box;
-        }
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .panel-title {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .panel-sub {
-            font-size: 11px;
-            color: #6b7280;
-        }
-        .chat-log {
-            max-height: 420px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-        .log-entry {
-            margin-bottom: 10px;
-            padding-bottom: 8px;
-            border-bottom: 1px solid #111827;
-        }
-        .log-meta {
-            font-size: 11px;
-            color: #6b7280;
-            margin-bottom: 4px;
-        }
-        .log-q {
-            font-size: 13px;
-            color: #e5e7eb;
-        }
-        .log-a {
-            font-size: 13px;
-            color: #9ca3af;
-            margin-top: 2px;
-        }
-        .token-bar {
-            height: 6px;
-            border-radius: 999px;
-            background: #020617;
-            overflow: hidden;
-            margin-top: 6px;
-        }
-        .token-bar-inner {
-            height: 100%;
-            background: linear-gradient(90deg, #22c55e, #eab308, #f97316, #ef4444);
-            width: 0%;
-            transition: width 0.4s ease;
-        }
-        .small {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-        }
+        body { font-family: Arial; background: #fafafa; padding: 20px; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; }
+        h2 { margin-top: 0; }
+        pre { background: #eee; padding: 10px; border-radius: 5px; }
     </style>
 </head>
 <body>
-<div class="layout">
-    <div class="sidebar">
-        <div>
-            <div class="logo">Temi<span>Control</span></div>
-            <div class="nav-section-title">Navigation</div>
-            <div class="nav-link active">Dashboard</div>
-            <div class="nav-link">Logs</div>
-            <div class="nav-link">System</div>
-        </div>
-        <div class="logout">
-            <a href="{{ url_for('logout') }}">Logout</a>
-        </div>
-    </div>
-    <div class="main">
-        <div class="topbar">
-            <div>
-                <div class="topbar-title">Übersicht</div>
-                <div class="topbar-sub">Live-Ansicht deiner KI-Session mit Temi</div>
-            </div>
-            <div class="topbar-sub">Elias · privat</div>
-        </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <div class="stat-label">Heutige Tokens</div>
-                <div class="stat-value" id="stat-used">–</div>
-                <div class="stat-sub">Verbrauch heute</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Verbleibend</div>
-                <div class="stat-value" id="stat-remaining">–</div>
-                <div class="stat-sub">geschätzt (Free Tier)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Gespräche</div>
-                <div class="stat-value" id="stat-logs">–</div>
-                <div class="stat-sub">Anzahl Einträge</div>
-            </div>
-        </div>
+<h1>Temi Dashboard</h1>
+<a href="/logout">Logout</a>
 
-        <div class="panel">
-            <div class="stat-label">Token-Auslastung</div>
-            <div class="token-bar">
-                <div class="token-bar-inner" id="token-bar-inner"></div>
-            </div>
-            <div class="small" id="token-bar-text">–</div>
-        </div>
+<div class="card">
+    <h2>Tokenverbrauch</h2>
+    <pre id="stats">Lade...</pre>
+</div>
 
-        <div class="content" style="margin-top: 14px;">
-            <div class="panel">
-                <div class="panel-header">
-                    <div>
-                        <div class="panel-title">Verlauf</div>
-                        <div class="panel-sub">Letzte Fragen & Antworten</div>
-                    </div>
-                </div>
-                <div class="chat-log" id="chat-log"></div>
-            </div>
-            <div class="panel">
-                <div class="panel-header">
-                    <div>
-                        <div class="panel-title">Details</div>
-                        <div class="panel-sub">Letzte Einträge</div>
-                    </div>
-                </div>
-                <div id="details-log" style="font-size: 12px; color: #9ca3af; max-height: 420px; overflow-y: auto;"></div>
-            </div>
-        </div>
-    </div>
+<div class="card">
+    <h2>Logs</h2>
+    <pre id="logs">Lade...</pre>
+</div>
+
+<div class="card">
+    <h2>System Info</h2>
+    <pre id="system">Lade...</pre>
 </div>
 
 <script>
-    async function fetchStats() {
-        try {
-            const res = await fetch("/api/stats");
-            if (!res.ok) return;
-            const data = await res.json();
+async function loadStats() {
+    let r = await fetch("/api/stats");
+    let j = await r.json();
+    document.getElementById("stats").textContent = JSON.stringify(j, null, 2);
+}
 
-            const used = data.daily_used || 0;
-            const limit = data.daily_limit || 1;
-            const remaining = data.daily_remaining || 0;
-            const totalLogs = data.total_logs || 0;
+async function loadLogs() {
+    let r = await fetch("/api/logs");
+    let j = await r.json();
+    document.getElementById("logs").textContent = JSON.stringify(j, null, 2);
+}
 
-            document.getElementById("stat-used").textContent = used.toLocaleString("de-DE");
-            document.getElementById("stat-remaining").textContent = remaining.toLocaleString("de-DE");
-            document.getElementById("stat-logs").textContent = totalLogs.toLocaleString("de-DE");
+async function loadSystem() {
+    let r = await fetch("/api/system");
+    let j = await r.json();
+    document.getElementById("system").textContent = JSON.stringify(j, null, 2);
+}
 
-            const percent = Math.min(100, (used / limit) * 100);
-            const bar = document.getElementById("token-bar-inner");
-            bar.style.width = percent.toFixed(1) + "%";
+setInterval(loadStats, 2000);
+setInterval(loadLogs, 2000);
+setInterval(loadSystem, 2000);
 
-            const text = document.getElementById("token-bar-text");
-            text.textContent = percent.toFixed(1) + "% des geschätzten Tageslimits genutzt";
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    async function fetchLogs() {
-        try {
-            const res = await fetch("/api/logs");
-            if (!res.ok) return;
-            const data = await res.json();
-
-            const chatLog = document.getElementById("chat-log");
-            const details = document.getElementById("details-log");
-            chatLog.innerHTML = "";
-            details.innerHTML = "";
-
-            data.slice().reverse().forEach(entry => {
-                const div = document.createElement("div");
-                div.className = "log-entry";
-                div.innerHTML = `
-                    <div class="log-meta">${entry.timestamp} · ${entry.tokens} Tokens</div>
-                    <div class="log-q"><strong>Du:</strong> ${entry.question}</div>
-                    <div class="log-a"><strong>Temi:</strong> ${entry.answer}</div>
-                `;
-                chatLog.appendChild(div);
-
-                const d = document.createElement("div");
-                d.style.marginBottom = "10px";
-                d.innerHTML = `
-                    <div><strong>${entry.timestamp}</strong></div>
-                    <div>Tokens: ${entry.tokens}</div>
-                    <div style="margin-top: 4px;"><strong>Frage:</strong> ${entry.question}</div>
-                    <div><strong>Antwort:</strong> ${entry.answer}</div>
-                    <hr style="border-color:#111827; margin-top:6px;">
-                `;
-                details.appendChild(d);
-            });
-        } catch (e) {
-            console.error(e);
-        }
-    }
-
-    function refreshAll() {
-        fetchStats();
-        fetchLogs();
-    }
-
-    refreshAll();
-    setInterval(refreshAll, 5000);
+loadStats();
+loadLogs();
+loadSystem();
 </script>
+
 </body>
 </html>
