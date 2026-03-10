@@ -182,13 +182,10 @@ def api_stats():
     })
 
 
-# ---------- API: SYSTEM INFO ----------
+# ---------- API: SYSTEM INFO (ÖFFENTLICH FÜR RENDER HEALTH CHECK) ----------
 
 @app.route("/api/system")
 def api_system():
-    if not is_logged_in():
-        return jsonify({"error": "unauthorized"}), 401
-
     return jsonify({
         "python_version": platform.python_version(),
         "system": platform.system(),
