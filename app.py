@@ -116,7 +116,7 @@ def generate():
     )
 
     payload = {
-        "model": "llama-3.3-70b-versatile",
+        "model": "llama-3.1-8b-instant",
         "max_tokens": 150,
         "messages": [
             {"role": "system", "content": system_prompt}
